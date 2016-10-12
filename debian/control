@@ -1,0 +1,13 @@
+Source: libuap-cpp
+Priority: extra
+Maintainer: Sergey kablov <s.kablov@sape.ru>
+Build-Depends: uap-core
+Standards-Version: 3.8.4
+Section: libs
+Homepage: https://github.com/sape-ru/uap-cpp.git
+
+Package: libuap-cpp-dev
+Section: libdevel
+Architecture: any
+Depends: ${shlibs:Depends}, uap-core, protobuf-compiler
+Description: ua parser header and libs

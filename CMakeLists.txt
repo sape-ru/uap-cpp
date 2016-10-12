@@ -1,0 +1,36 @@
+cmake_minimum_required(VERSION 2.8)
+
+set(CMAKE_CXX_FLAGS "-std=c++0x -Wall -Werror -O3 -fPIC -g")
+ 
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
+add_subdirectory(/usr/src/gtest/ ${CMAKE_CURRENT_BINARY_DIR}/gtest)
+FIND_PACKAGE (Boost REQUIRED COMPONENTS regex)
+enable_testing()
+find_path(GTEST_INC gtest/gtest.h)
+INCLUDE_DIRECTORIES(${GTEST_INC})
+IF (NOT EXISTS "/usr/src/gtest/")
+    MESSAGE("It seems libgtest-dev is not install be sure it install with src code")
+ENDIF()    
+INCLUDE(FindPkgConfig)
+pkg_check_modules(YAML yaml-cpp)
+message("Found Yaml " ${YAML_VERSION})
+string(COMPARE GREATER ${YAML_VERSION} "0.5" res)
+IF (NOT ${res})
+    MESSAGE(FATAL_ERROR "lib yaml wrong version ${YAML_VERSION}")
+
+ENDIF()
+
+add_library(uaparser_cpp_OBJLIB OBJECT UaParser.cpp)
+set_target_properties(uaparser_cpp_OBJLIB PROPERTIES POSITION_INDEPENDENT_CODE 1)
+add_library(uaparser_cpp SHARED $<TARGET_OBJECTS:uaparser_cpp_OBJLIB>)
+add_library(uaparser_cpp_static STATIC $<TARGET_OBJECTS:uaparser_cpp_OBJLIB> )
+set_target_properties(uaparser_cpp_static PROPERTIES OUTPUT_NAME uaparser_cpp)
+target_link_libraries(uaparser_cpp ${YAML_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(uaparser_cpp_static ${YAML_LIBRARIES} ${Boost_LIBRARIES})
+add_executable(UaParserTest UaParserTest.cpp)
+        
+target_link_libraries(UaParserTest uaparser_cpp_static -L${CMAKE_CURRENT_BINARY_DIR}/gtest gtest ${YAML_LIBRARIES} ${GLOG_LIBRARIES} ${Boost_LIBRARIES} ${GTEST_LIB_STATIC} pthread)
+add_test(UaParserTest UaParserTest)
