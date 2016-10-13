@@ -12,5 +12,11 @@
 %:
 	dh $@ 
 
+override_dh_auto_configure:
+	dh_auto_configure --buildsystem=cmake
+
+#override_dh_auto_test:
+###	cd .. && make -f ${OLDPWD}/Makefile test && cd ${OLDPWD}
+
 override_dh_auto_install:
 	dh_auto_install

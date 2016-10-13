@@ -20,7 +20,6 @@ message("Found Yaml " ${YAML_VERSION})
 string(COMPARE GREATER ${YAML_VERSION} "0.5" res)
 IF (NOT ${res})
     MESSAGE(FATAL_ERROR "lib yaml wrong version ${YAML_VERSION}")
-
 ENDIF()
 
 add_library(uaparser_cpp_OBJLIB OBJECT UaParser.cpp)
@@ -32,5 +31,12 @@ target_link_libraries(uaparser_cpp ${YAML_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(uaparser_cpp_static ${YAML_LIBRARIES} ${Boost_LIBRARIES})
 add_executable(UaParserTest UaParserTest.cpp)
         
-target_link_libraries(UaParserTest uaparser_cpp_static -L${CMAKE_CURRENT_BINARY_DIR}/gtest gtest ${YAML_LIBRARIES} ${GLOG_LIBRARIES} ${Boost_LIBRARIES} ${GTEST_LIB_STATIC} pthread)
+target_link_libraries(UaParserTest uaparser_cpp_static gtest ${YAML_LIBRARIES} ${Boost_LIBRARIES} pthread)
 add_test(UaParserTest UaParserTest)
+
+FILE (GLOB HDR "*.h")
+
+INSTALL (FILES ${HDR} DESTINATION include/uap-cpp)
+INSTALL (TARGETS uaparser_cpp uaparser_cpp_static LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+
+
