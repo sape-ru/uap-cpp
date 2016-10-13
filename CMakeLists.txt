@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-
 set(CMAKE_CXX_FLAGS "-std=c++0x -Wall -Werror -O3 -fPIC -g")
- 
-if(COMMAND cmake_policy)
-  cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
 
 add_subdirectory(/usr/src/gtest/ ${CMAKE_CURRENT_BINARY_DIR}/gtest)
 FIND_PACKAGE (Boost REQUIRED COMPONENTS regex)
@@ -13,7 +8,10 @@ find_path(GTEST_INC gtest/gtest.h)
 INCLUDE_DIRECTORIES(${GTEST_INC})
 IF (NOT EXISTS "/usr/src/gtest/")
     MESSAGE("It seems libgtest-dev is not install be sure it install with src code")
-ENDIF()    
+ENDIF()
+IF (NOT EXISTS "/usr/share/uap-core/")
+    MESSAGE("Please install uap-core with test_resources and regex.yaml")
+ENDIF()
 INCLUDE(FindPkgConfig)
 pkg_check_modules(YAML yaml-cpp)
 message("Found Yaml " ${YAML_VERSION})
@@ -21,7 +19,7 @@ string(COMPARE GREATER ${YAML_VERSION} "0.5" res)
 IF (NOT ${res})
     MESSAGE(FATAL_ERROR "lib yaml wrong version ${YAML_VERSION}")
 ENDIF()
-
+add_definitions(-DUAP_CORE_PATH="/usr/share/uap-core")
 add_library(uaparser_cpp_OBJLIB OBJECT UaParser.cpp)
 set_target_properties(uaparser_cpp_OBJLIB PROPERTIES POSITION_INDEPENDENT_CODE 1)
 add_library(uaparser_cpp SHARED $<TARGET_OBJECTS:uaparser_cpp_OBJLIB>)
@@ -38,5 +36,4 @@ FILE (GLOB HDR "*.h")
 
 INSTALL (FILES ${HDR} DESTINATION include/uap-cpp)
 INSTALL (TARGETS uaparser_cpp uaparser_cpp_static LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-
 

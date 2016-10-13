@@ -6,7 +6,11 @@
 
 namespace {
 
+#ifdef UAP_CORE_PATH
+static const std::string UA_CORE_DIR = UAP_CORE_PATH;
+#else
 static const std::string UA_CORE_DIR = "../uap-core";
+#endif
 
 const UserAgentParser g_ua_parser(UA_CORE_DIR + "/regexes.yaml");
 
