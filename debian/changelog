@@ -1,3 +1,10 @@
+libuap-cpp (0.1.2-1) UNRELEASED; urgency=medium
+
+  * CMakeList improvements
+  *
+
+ -- MAINTAINER <s.kablov@sape.ru>  Mon, 17 Oct 2016 19:19:39 +0300
+
 libuap-cpp (0.1.1-1) UNRELEASED; urgency=medium
 
   * Initial release.
