@@ -2,7 +2,7 @@ Source: libuap-cpp
 Priority: extra
 Maintainer: Sergey kablov <s.kablov@sape.ru>
 Standards-Version: 3.8.4
-Build-Depends: uap-core, libgtest-dev, libboost-regex-dev, libyaml-cpp0.5
+Build-Depends: uap-core, libgtest-dev, libboost-regex-dev, libyaml-cpp-dev, libyaml-cpp0.5
 Section: libs
 Homepage: https://github.com/sape-ru/uap-cpp.git
 
